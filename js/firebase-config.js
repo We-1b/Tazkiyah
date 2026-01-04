@@ -1,32 +1,25 @@
 /*
   =========================================================
   اسم الملف: js/firebase-config.js
-  الوصف: ملف الربط بفايربيس (محتاج مفاتيحك الحقيقية عشان يشتغل)
+  الوصف: ملف الربط بفايربيس (تم التحديث بالمفاتيح الحقيقية)
   =========================================================
 */
 
+// بنستخدم روابط CDN عشان الموقع يشتغل على المتصفح مباشرة من غير Node.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔴 هام جداً: لازم تمسح الكلام اللي بين علامات التنصيص تحت وتحط بياناتك الحقيقية
+// إعدادات مشروعك الحقيقية (Tazkiyah App)
 const firebaseConfig = {
-    apiKey: "نسخ_الكود_هنا", 
-    authDomain: "نسخ_الكود_هنا",
-    projectId: "نسخ_الكود_هنا",
-    storageBucket: "نسخ_الكود_هنا",
-    messagingSenderId: "نسخ_الكود_هنا",
-    appId: "نسخ_الكود_هنا"
+    apiKey: "AIzaSyCPLO_YbLlBWZ_ivAOBh9Fq1KqoOZbWOGs",
+    authDomain: "tazkiyah-app-d27b8.firebaseapp.com",
+    projectId: "tazkiyah-app-d27b8",
+    storageBucket: "tazkiyah-app-d27b8.firebasestorage.app",
+    messagingSenderId: "1083049907770",
+    appId: "1:1083049907770:web:10cec436b66cce13378703",
+    measurementId: "G-T3W61F8F5N"
 };
-
-/*
-  💡 بتجيب البيانات دي منين؟
-  1. افتح https://console.firebase.google.com/
-  2. ادخل مشروعك (Tazkiyah-App)
-  3. دوس علامة الترس ⚙️ (Project Settings)
-  4. انزل تحت خالص عند "Your apps"
-  5. اختار "Config" وانسخ البيانات اللي شبه دي بالظبط
-*/
 
 // تهيئة التطبيق
 const app = initializeApp(firebaseConfig);
