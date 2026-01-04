@@ -21,7 +21,7 @@
             <p class="text-gray-500 mt-2">استكمل رحلة التزكية</p>
         </div>
 
-        <!-- زرار جوجل الجديد -->
+        <!-- زرار جوجل -->
         <button id="googleLoginBtn" class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-3 mb-6 shadow-sm group">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6 group-hover:scale-110 transition" alt="Google">
             <span>تسجيل الدخول باستخدام جوجل</span>
@@ -53,12 +53,17 @@
 
         <p id="errorMessage" class="text-red-500 text-sm text-center mt-4 hidden"></p>
 
-        <div class="mt-8 text-center text-sm text-gray-500">
+        <!-- ده الجزء اللي كان ناقصك يا هندسة 👇 -->
+        <div class="mt-6 text-center text-sm text-gray-600">
+            ليس لديك حساب؟ <a href="register.html" class="text-emerald-600 font-bold hover:underline transition">أنشئ حساب جديد</a>
+        </div>
+        
+        <div class="mt-4 text-center text-sm text-gray-500">
             <a href="index.html" class="hover:text-emerald-600 font-medium transition">← العودة للرئيسية</a>
         </div>
     </div>
 
-    <!-- ربط ملف الجافا سكريبت الجديد -->
+    <!-- ربط ملف الجافا سكريبت -->
     <script type="module" src="js/login.js"></script>
 
 </body>
