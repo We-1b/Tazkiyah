@@ -10,10 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        body { font-family: 'Baloo Bhaijaan 2', sans-serif; }
-    </style>
+    <style>body { font-family: 'Baloo Bhaijaan 2', sans-serif; }</style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
@@ -54,7 +51,6 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden relative">
             
-            <!-- Topbar -->
             <header class="bg-white shadow-sm h-20 flex items-center justify-between px-6 z-10">
                 <div class="md:hidden text-emerald-700 text-2xl cursor-pointer hover:scale-110 transition">
                     <i class="fas fa-bars"></i>
@@ -77,22 +73,19 @@
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 md:p-8">
                 
-                <!-- Welcome -->
                 <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-3xl p-8 text-white shadow-xl mb-8 relative overflow-hidden group">
                     <div class="relative z-10">
                         <h2 class="text-3xl font-bold mb-3 user-name-display">السلام عليكم 👋</h2>
-                        <p class="text-emerald-100 text-lg opacity-90 max-w-lg leading-relaxed">
-                            "أحب الأعمال إلى الله أدومها وإن قل".
-                        </p>
+                        <p class="text-emerald-100 text-lg opacity-90 max-w-lg leading-relaxed">"أحب الأعمال إلى الله أدومها وإن قل".</p>
                     </div>
                     <div class="welcome-widget-circle absolute -left-10 -bottom-20 w-64 h-64 bg-white opacity-10 rounded-full blur-2xl group-hover:scale-110 transition duration-700"></div>
                 </div>
 
-                <!-- Stats Grid (الكروت بقت لينكات دلوقتي) -->
+                <!-- Stats Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     
-                    <!-- كارت الصلاة (بيوديك التقارير) -->
-                    <a href="reports.html" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-emerald-500 hover:shadow-md transition cursor-pointer">
+                    <!-- كارت الصلاة -->
+                    <a href="reports.html" id="card-prayer" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-emerald-500 hover:shadow-md transition cursor-pointer">
                         <div class="flex justify-between items-center mb-6">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
@@ -100,7 +93,6 @@
                                 </div>
                                 <h3 class="font-bold text-gray-800">الصلوات</h3>
                             </div>
-                            <!-- هنا الرقم اللي هيتغير -->
                             <span id="prayers-count-display" class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full text-xs font-bold">0/5</span>
                         </div>
                         <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
@@ -108,12 +100,12 @@
                         </div>
                         <p class="text-xs text-gray-400 mt-4 flex items-center gap-1">
                             <i class="far fa-clock"></i>
-                            <span id="next-prayer-text">جاري الحساب...</span>
+                            <span id="next-prayer-text">...</span>
                         </p>
                     </a>
 
-                    <!-- كارت السنن -->
-                    <a href="reports.html" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-amber-500 hover:shadow-md transition cursor-pointer">
+                    <!-- كارت السنن (واخد ID عشان الإعدادات تتحكم فيه) -->
+                    <a href="reports.html" id="card-sunan" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-amber-500 hover:shadow-md transition cursor-pointer">
                         <div class="flex justify-between items-center mb-6">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
@@ -121,13 +113,11 @@
                                 </div>
                                 <h3 class="font-bold text-gray-800">السنن</h3>
                             </div>
-                            <!-- رقم السنن -->
                             <span id="sunan-count-display" class="text-amber-700 bg-amber-100 px-3 py-1 rounded-full text-xs font-bold">0/12</span>
                         </div>
                         <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                             <div id="sunan-progress-bar" class="bg-amber-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
                         </div>
-                        <p class="text-xs text-gray-400 mt-4">ركعتا الضحى صلاة الأوابين.</p>
                     </a>
 
                     <!-- كارت الذكر -->
@@ -137,7 +127,7 @@
                             <i class="fas fa-fingerprint text-blue-400 text-xl"></i>
                         </div>
                         <div class="flex flex-col items-center justify-center py-2">
-                            <span class="text-4xl font-extrabold text-gray-800 counter-value">100</span>
+                            <span class="text-4xl font-extrabold text-gray-800">100</span>
                             <span class="text-sm text-gray-400 mt-1">من أصل 1000</span>
                         </div>
                     </a>
@@ -150,8 +140,8 @@
                         متابعة اليوم
                     </h3>
 
-                    <div class="space-y-4">
-                        <!-- الصلوات (لاحظ الـ data-type) -->
+                    <div class="space-y-4" id="habits-list">
+                        <!-- الفروض (data-type="prayer") -->
                         <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
                             <div class="relative flex items-center">
                                 <input type="checkbox" data-type="prayer" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
@@ -159,7 +149,6 @@
                             <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">صلاة الفجر</span>
                             <span class="mr-auto text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">فرض</span>
                         </label>
-
                         <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
                             <div class="relative flex items-center">
                                 <input type="checkbox" data-type="prayer" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
@@ -167,17 +156,10 @@
                             <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">صلاة الظهر</span>
                             <span class="mr-auto text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">فرض</span>
                         </label>
+                        <!-- كمل باقي الصلوات بنفس الطريقة (العصر، المغرب، العشاء) -->
 
-                        <!-- السنن (لاحظ الـ data-type) -->
-                        <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
-                            <div class="relative flex items-center">
-                                <input type="checkbox" data-type="sunnah" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
-                            </div>
-                            <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">أذكار الصباح</span>
-                            <span class="mr-auto text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">سنة</span>
-                        </label>
-                        
-                        <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
+                        <!-- السنن (data-type="sunnah") -->
+                        <label class="sunnah-item flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
                             <div class="relative flex items-center">
                                 <input type="checkbox" data-type="sunnah" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
                             </div>
@@ -194,6 +176,5 @@
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/dashboard.js"></script>
     <script type="module" src="js/chat-widget.js"></script>
-
 </body>
 </html>
