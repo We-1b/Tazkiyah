@@ -1,0 +1,42 @@
+/* استيراد خط "كايرو" عشان يليق مع الهوية العربية والإسلامية */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #047857; /* لون أخضر إسلامي */
+    --gold-accent: #D4AF37;   /* لون ذهبي للتزيين */
+    --bg-light: #F3F4F6;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-light);
+    direction: rtl; /* عشان الموقع عربي */
+}
+
+/* تخصيص السكرول بار */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #065f46;
+}
+
+/* كلاسات مساعدة */
+.text-gold {
+    color: var(--gold-accent);
+}
+
+.bg-pattern {
+    /* هنا ممكن نضيف خلفية زخرفة إسلامية خفيفة */
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23047857' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | أوّاب</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css"> <!-- الملف الإضافي اللي اتفقنا عليه -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-cairo">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar (القائمة الجانبية) -->
+        <aside class="hidden md:flex flex-col w-64 bg-emerald-900 text-white shadow-xl">
+            <div class="p-6 flex items-center justify-center border-b border-emerald-800">
+                <h1 class="text-2xl font-bold">أوّاب 🕌</h1>
+            </div>
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <a href="#" class="flex items-center p-3 bg-emerald-800 rounded-lg text-white">
+                    <i class="fas fa-home w-8 text-center"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-lg text-emerald-100 transition">
+                    <i class="fas fa-praying-hands w-8 text-center"></i>
+                    <span>الصلوات والسنن</span>
+                </a>
+                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-lg text-emerald-100 transition">
+                    <i class="fas fa-moon w-8 text-center"></i>
+                    <span>الصيام</span>
+                </a>
+                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-lg text-emerald-100 transition">
+                    <i class="fas fa-chart-pie w-8 text-center"></i>
+                    <span>التقارير</span>
+                </a>
+                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-lg text-emerald-100 transition">
+                    <i class="fas fa-robot w-8 text-center"></i>
+                    <span>المساعد الذكي</span>
+                    <span class="bg-yellow-500 text-xs text-black px-2 py-0.5 rounded-full mr-auto">Beta</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-emerald-800">
+                <a href="index.html" class="flex items-center p-2 text-red-300 hover:text-red-100 transition">
+                    <i class="fas fa-sign-out-alt w-8 text-center"></i>
+                    <span>تسجيل خروج</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- Topbar (الموبايل والبروفايل) -->
+            <header class="bg-white shadow-sm h-16 flex items-center justify-between px-6">
+                <div class="md:hidden text-emerald-700 text-xl cursor-pointer">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    <span>14 جمادى الآخرة 1446هـ</span> | <span id="current-time">10:30 ص</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-semibold text-gray-700">مصطفى</span>
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border border-emerald-200">
+                        M
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Scroll Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+                
+                <!-- Welcome Widget -->
+                <div class="bg-gradient-to-l from-emerald-700 to-emerald-600 rounded-2xl p-6 text-white shadow-lg mb-8 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h2 class="text-2xl font-bold mb-2">السلام عليكم يا مصطفى 👋</h2>
+                        <p class="text-emerald-100 opacity-90">"أحب الأعمال إلى الله أدومها وإن قل". استمر في تقدمك!</p>
+                    </div>
+                    <!-- Decorative Circle -->
+                    <div class="absolute -left-10 -bottom-20 w-48 h-48 bg-white opacity-10 rounded-full"></div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- الصلاة -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-emerald-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-700">الصلوات اليوم</h3>
+                            <span class="text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full text-xs">2/5</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 40%"></div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2">الصلاة القادمة: الظهر (بعد 30 دقيقة)</p>
+                    </div>
+
+                    <!-- السنن -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-yellow-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-700">السنن والرواتب</h3>
+                            <span class="text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full text-xs">4/12 ركعة</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 33%"></div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2">لا تنسَ ركعتي الضحى</p>
+                    </div>
+
+                    <!-- الذكر -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-blue-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-700">ورد الاستغفار</h3>
+                            <i class="fas fa-fingerprint text-blue-400"></i>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-3xl font-bold text-gray-800">100</span>
+                            <span class="text-sm text-gray-500">/ 1000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Habits Checklist Preview -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2">متابعة اليوم</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3 space-x-reverse cursor-pointer group">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500">
+                            <span class="text-gray-700 group-hover:text-emerald-700 transition">صلاة الفجر في جماعة</span>
+                        </label>
+                        <label class="flex items-center space-x-3 space-x-reverse cursor-pointer group">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500">
+                            <span class="text-gray-700 group-hover:text-emerald-700 transition">أذكار الصباح</span>
+                        </label>
+                        <label class="flex items-center space-x-3 space-x-reverse cursor-pointer group">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500">
+                            <span class="text-gray-700 group-hover:text-emerald-700 transition">قراءة ورد القرآن</span>
+                        </label>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script src="js/notifications.js"></script>
+</body>
+</html>
