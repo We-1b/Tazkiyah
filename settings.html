@@ -1,0 +1,105 @@
+!DOCTYPE html
+html lang=ar dir=rtl
+head
+    meta charset=UTF-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    titleالإعدادات  تزكيةtitle
+    link rel=stylesheet href=style.css
+    link rel=stylesheet href=dashboard.css
+    script src=httpscdn.tailwindcss.comscript
+    link rel=stylesheet href=httpscdnjs.cloudflare.comajaxlibsfont-awesome6.4.0cssall.min.css
+    link href=httpsfonts.googleapis.comcss2family=Baloo+Bhaijaan+2wght@400;500;600;700;800&display=swap rel=stylesheet
+    stylebody { font-family 'Baloo Bhaijaan 2', sans-serif; }style
+head
+body class=bg-gray-50 text-gray-800
+
+    div class=flex h-screen overflow-hidden
+        
+        !-- Sidebar --
+        aside class=hidden mdflex flex-col w-64 bg-emerald-900 text-white shadow-xl
+            div class=p-6 flex items-center justify-center border-b border-emerald-800
+                div class=flex items-center gap-2
+                    i class=fas fa-leaf text-emerald-400 text-2xli
+                    h1 class=text-2xl font-boldتزكيةh1
+                div
+            div
+            nav class=flex-1 p-4 space-y-2
+                a href=dashboard.html class=flex items-center p-3 hoverbg-emerald-800 rounded-xl text-emerald-100 transition
+                    i class=fas fa-home w-8 text-centeri
+                    spanالرئيسيةspan
+                a
+                a href=# class=flex items-center p-3 bg-emerald-800 rounded-xl text-white shadow-lg
+                    i class=fas fa-cog w-8 text-centeri
+                    spanالإعداداتspan
+                a
+            nav
+        aside
+
+        !-- Main Content --
+        div class=flex-1 flex flex-col overflow-hidden
+            header class=bg-white shadow-sm h-20 flex items-center px-6
+                h2 class=text-xl font-bold text-gray-800إعدادات الحسابh2
+            header
+
+            main class=flex-1 overflow-y-auto p-6 mdp-8
+                div class=max-w-3xl mx-auto space-y-6
+                    
+                    !-- قسم التفضيلات --
+                    div class=bg-white rounded-2xl shadow-sm p-6
+                        h3 class=text-lg font-bold text-gray-800 mb-4 border-b pb-2تخصيص العباداتh3
+                        
+                        div class=space-y-4
+                            div class=flex items-center justify-between
+                                div
+                                    p class=font-bold text-gray-700إظهار السنن الرواتبp
+                                    p class=text-sm text-gray-500عرض الـ 12 ركعة والضحى في القائمة الرئيسيةp
+                                div
+                                label class=relative inline-flex items-center cursor-pointer
+                                    input type=checkbox id=toggleSunan class=sr-only peer
+                                    div class=w-11 h-6 bg-gray-200 peer-focusoutline-none rounded-full peer peer-checkedaftertranslate-x-full peer-checkedafterborder-white aftercontent-[''] afterabsolute aftertop-[2px] afterleft-[2px] afterbg-white afterborder-gray-300 afterborder afterrounded-full afterh-5 afterw-5 aftertransition-all peer-checkedbg-emerald-600div
+                                label
+                            div
+
+                            div class=flex items-center justify-between
+                                div
+                                    p class=font-bold text-gray-700تنبيهات الصيامp
+                                    p class=text-sm text-gray-500تذكير قبل الاثنين والخميس والأيام البيضp
+                                div
+                                label class=relative inline-flex items-center cursor-pointer
+                                    input type=checkbox id=toggleFasting class=sr-only peer
+                                    div class=w-11 h-6 bg-gray-200 peer-focusoutline-none rounded-full peer peer-checkedaftertranslate-x-full peer-checkedafterborder-white aftercontent-[''] afterabsolute aftertop-[2px] afterleft-[2px] afterbg-white afterborder-gray-300 afterborder afterrounded-full afterh-5 afterw-5 aftertransition-all peer-checkedbg-emerald-600div
+                                label
+                            div
+                        div
+                    div
+
+                    !-- قسم الصوت --
+                    div class=bg-white rounded-2xl shadow-sm p-6
+                        h3 class=text-lg font-bold text-gray-800 mb-4 border-b pb-2الأصوات والتنبيهاتh3
+                        div class=flex items-center justify-between
+                            div
+                                p class=font-bold text-gray-700صوت الأذانp
+                                p class=text-sm text-gray-500تشغيل الأذان كاملاً عند وقت الصلاةp
+                            div
+                            label class=relative inline-flex items-center cursor-pointer
+                                input type=checkbox id=toggleAdhanSound class=sr-only peer
+                                div class=w-11 h-6 bg-gray-200 peer-focusoutline-none rounded-full peer peer-checkedaftertranslate-x-full peer-checkedafterborder-white aftercontent-[''] afterabsolute aftertop-[2px] afterleft-[2px] afterbg-white afterborder-gray-300 afterborder afterrounded-full afterh-5 afterw-5 aftertransition-all peer-checkedbg-emerald-600div
+                            label
+                        div
+                    div
+
+                    !-- زر الحفظ --
+                    div class=flex justify-end
+                        button id=saveSettingsBtn class=bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hoverbg-emerald-700 transition transform hover-translate-y-1
+                            حفظ التغييرات
+                        button
+                    div
+
+                div
+            main
+        div
+    div
+
+    script type=module src=jssettings.jsscript
+body
+html

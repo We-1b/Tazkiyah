@@ -1,48 +1,58 @@
 /*
-  Habits.js
-  منطق التعامل مع الـ Checkboxes للسنن والصيام
+  Habits.js (نسخة المزامنة)
+  إدارة العادات ومزامنتها لحظياً مع Firebase Firestore
+  - لما تعلم صح، بتسمع في المتصفح فوراً (عشان السرعة).
+  - وفي الخلفية بتبعتها لفايربيس (عشان الأمان).
 */
 
-// قائمة العادات اللي بنتابعها
-const HABITS = {
-    sunan: ['سنة الفجر', 'سنة الظهر', 'سنة المغرب', 'سنة العشاء', 'الوتر', 'الضحى'],
-    fasting: ['الاثنين', 'الخميس', 'الأيام البيض'],
-    daily: ['أذكار الصباح', 'أذكار المساء', 'قراءة الورد']
-};
+import { auth, db } from './firebase-config.js';
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export function toggleHabit(habitName, isChecked) {
-    const today = new Date().toISOString().split('T')[0];
-    let dailyLog = JSON.parse(localStorage.getItem(`habits_${today}`)) || {};
-    
-    dailyLog[habitName] = isChecked;
-    
-    localStorage.setItem(`habits_${today}`, JSON.stringify(dailyLog));
-    
-    updateProgressUI(); // تحديث شريط التقدم فوراً
-    console.log(`تم تحديث العادة: ${habitName} -> ${isChecked}`);
-}
+// دالة لتبديل حالة العادة (Checked/Unchecked)
+export async function toggleHabit(habitName, isChecked) {
+    const user = auth.currentUser;
+    const today = new Date().toISOString().split('T')[0]; // تاريخ النهاردة YYYY-MM-DD
 
-function updateProgressUI() {
-    // كود بيحسب عدد الـ True في اللوكال ستوريج ويحدث الـ Progress Bar
-    const today = new Date().toISOString().split('T')[0];
-    const dailyLog = JSON.parse(localStorage.getItem(`habits_${today}`)) || {};
-    
-    const totalHabits = Object.keys(HABITS.daily).length + Object.keys(HABITS.sunan).length; // تبسيط
-    const completed = Object.values(dailyLog).filter(v => v === true).length;
-    
-    // هنا ممكن نبعت event للداشبورد عشان يحدث نفسه
-    // document.dispatchEvent(new CustomEvent('habitsUpdated', { detail: { completed } }));
-}
+    // 1. تحديث الواجهة فوراً (Optimistic UI) عشان اليوزر ميحسش بتقل
+    updateLocalStorage(today, habitName, isChecked);
 
-// التحقق من أيام الصيام
-export function checkFastingDay() {
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 1 = Monday, 4 = Thursday
-    
-    if (dayOfWeek === 1 || dayOfWeek === 4) {
-        return { isFastingDay: true, type: 'سنة مؤكدة (الاثنين/الخميس)' };
+    // 2. التحديث في السيرفر (لو اليوزر مسجل)
+    if (user) {
+        try {
+            // بنسجل كل يوم في Document منفصل عشان الداتا متكبرش قوي في ملف اليوزر
+            // المسار: users -> {uid} -> dailyLogs -> {date}
+            const logRef = doc(db, "users", user.uid, "dailyLogs", today);
+            
+            // بنستخدم setDoc مع merge: true عشان لو الملف مش موجود ينشئه، ولو موجود يحدثه بس
+            await setDoc(logRef, {
+                [habitName]: isChecked,
+                lastUpdated: new Date()
+            }, { merge: true });
+
+            console.log(`تمت المزامنة: ${habitName} -> ${isChecked} ✅`);
+        } catch (error) {
+            console.error("فشل المزامنة مع السيرفر:", error);
+            // ممكن هنا نعرض علامة تعجب حمراء جنب العادة لو حبيت تعقد الأمور
+        }
     }
+}
+
+// دالة مساعدة للتخزين المحلي (عشان لو النت قطع، الداتا متضيعش من قدام اليوزر)
+function updateLocalStorage(date, habitName, value) {
+    const key = `habits_${date}`;
+    let data = JSON.parse(localStorage.getItem(key)) || {};
+    data[habitName] = value;
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+// دالة لحساب نسبة الإنجاز اليومية (ممكن تستخدمها في الداشبورد)
+export function calculateDailyProgress() {
+    const today = new Date().toISOString().split('T')[0];
+    const data = JSON.parse(localStorage.getItem(`habits_${today}`)) || {};
     
-    // هنا محتاجين مكتبة Hijri Date عشان الأيام البيض (13, 14, 15)
-    return { isFastingDay: false };
+    // لنفترض أن عندنا عدد ثابت من المهام يومياً
+    const totalTasks = 5; // (5 صلوات مثلاً)
+    const completedTasks = Object.values(data).filter(v => v === true).length;
+    
+    return Math.min(100, Math.round((completedTasks / totalTasks) * 100));
 }

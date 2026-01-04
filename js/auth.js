@@ -1,67 +1,108 @@
 /*
-  ملف التحكم في الدخول والخروج (Auth)
-  بيتعامل مع تسجيل الدخول، إنشاء الحساب، والخروج
+  ملف التحكم في الدخول (Google & Email)
+  تم التحديث: إضافة الدخول بجوجل وحفظ بيانات المستخدم في Firestore
 */
 
-import { auth } from './firebase-config.js';
+import { auth, googleProvider, db } from './firebase-config.js';
 import { 
+    signInWithPopup, 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
     signOut, 
     onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// دالة تسجيل الدخول
+// ==========================================
+// 1. دالة تسجيل الدخول بجوجل (Google Sign-In)
+// ==========================================
+export async function loginWithGoogle() {
+    try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+
+        // هنتأكد هل اليوزر ده جديد ولا قديم؟
+        // عشان لو جديد، نجهزه الداتابيز بتاعته (إعدادات افتراضية)
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+            // يوزر جديد: أنشئ له ملف في الداتابيز
+            await setDoc(userRef, {
+                uid: user.uid,
+                name: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                createdAt: new Date(),
+                // هنا الإعدادات الافتراضية اللي اليوزر يقدر يعدلها براحته بعدين
+                preferences: {
+                    showSunan: true,      // إظهار السنن (افتراضي: نعم)
+                    enableFasting: true,  // تذكير الصيام
+                    dailyTarget: "medium" // مستوى الالتزام
+                },
+                customHabits: [] // مصفوفة فاضية يضيف فيها اللي هو عايزه
+            });
+            console.log("تم إنشاء ملف مستخدم جديد في قاعدة البيانات 🎉");
+        }
+
+        console.log("تم تسجيل الدخول بنجاح:", user.displayName);
+        window.location.href = 'dashboard.html'; // تحويل للداشبورد
+        return { success: true, user: user };
+
+    } catch (error) {
+        console.error("خطأ في دخول جوجل:", error.message);
+        alert("حصل مشكلة في تسجيل الدخول، حاول تاني.");
+        return { success: false, error: error.message };
+    }
+}
+
+// ==========================================
+// 2. الدوال العادية (إيميل وباسورد) - زي ما هي
+// ==========================================
 export async function loginUser(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log("تم تسجيل الدخول بنجاح يا هندسة:", userCredential.user.email);
+        window.location.href = 'dashboard.html';
         return { success: true, user: userCredential.user };
     } catch (error) {
-        console.error("خطأ في الدخول:", error.code);
         return { success: false, error: error.message };
     }
 }
 
-// دالة إنشاء حساب جديد
 export async function registerUser(email, password) {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("ألف مبروك الحساب الجديد:", userCredential.user.email);
-        return { success: true, user: userCredential.user };
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        // برضه هننشئ له داتابيز لو سجل بإيميل
+        await setDoc(doc(db, "users", result.user.uid), {
+            email: email,
+            createdAt: new Date(),
+            preferences: { showSunan: true, enableFasting: true },
+            customHabits: []
+        });
+        return { success: true, user: result.user };
     } catch (error) {
         return { success: false, error: error.message };
     }
 }
 
-// دالة الخروج
 export async function logoutUser() {
     try {
         await signOut(auth);
-        window.location.href = 'index.html'; // ارجع للرئيسية
+        window.location.href = 'index.html';
     } catch (error) {
         console.error("مشكلة في الخروج:", error);
     }
 }
 
-// مراقب الحالة (عشان نعرف اليوزر داخل ولا لا ونحمي الصفحات)
 export function initAuthListener() {
     onAuthStateChanged(auth, (user) => {
         const currentPath = window.location.pathname;
-        
         if (user) {
-            // لو اليوزر مسجل وموجود في صفحة الدخول، وديه الداشبورد
-            if (currentPath.includes('login.html') || currentPath.includes('register.html')) {
-                window.location.href = 'dashboard.html';
-            }
-            // ممكن هنا نحفظ بيانات اليوزر في LocalStorage لو عايزين سرعة
             localStorage.setItem('user_uid', user.uid);
+            if (currentPath.includes('login.html')) window.location.href = 'dashboard.html';
         } else {
-            // لو اليوزر مش مسجل وبيحاول يفتح الداشبورد، رجعه يسجل
-            if (currentPath.includes('dashboard.html')) {
-                window.location.href = 'login.html';
-            }
             localStorage.removeItem('user_uid');
+            if (currentPath.includes('dashboard.html')) window.location.href = 'login.html';
         }
     });
 }
