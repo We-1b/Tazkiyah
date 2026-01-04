@@ -26,10 +26,23 @@ if (regForm) {
     regForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
+        // جلب القيم وتنظيف الفراغات الزيادة
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         const btn = regForm.querySelector('button[type="submit"]');
+
+        // --- خطوة الأمان الجديدة: التأكد من البيانات قبل الإرسال ---
+        if (!name || !email || !password) {
+            showError("يا بطل، لازم تملأ كل البيانات (الاسم، الإيميل، والباسورد) 😉");
+            return; // وقف هنا متكملش
+        }
+
+        if (password.length < 6) {
+            showError("كلمة المرور ضعيفة، خليها 6 حروف أو أرقام على الأقل 🔐");
+            return;
+        }
+        // -------------------------------------------------------
 
         // تغيير حالة الزرار عشان تعرف إنه شغال
         const originalText = btn.textContent;
@@ -86,10 +99,15 @@ if (regForm) {
             if (error.message.includes("email-already-in-use")) message = "البريد ده مستخدم قبل كده، جرب تسجل دخول.";
             if (error.message.includes("weak-password")) message = "الباسورد ضعيف، خليه 6 أرقام أو حروف على الأقل.";
             if (error.message.includes("invalid-email")) message = "شكل الإيميل مش مظبوط.";
+            if (error.message.includes("missing-password")) message = "نسيت تكتب الباسورد يا هندسة!";
             if (error.message.includes("operation-not-allowed")) message = "تنبيه هام: لازم تفعل Email/Password من لوحة تحكم فايربيس!";
             
-            errorMsg.textContent = message;
-            errorMsg.classList.remove('hidden');
+            showError(message);
         }
     });
+}
+
+function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.remove('hidden');
 }
