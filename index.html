@@ -14,7 +14,7 @@
     <!-- مكتبة Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- الخطوط: Baloo Bhaijaan 2 كما طلبت -->
+    <!-- الخطوط: Baloo Bhaijaan 2 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,13 +22,9 @@
     <link rel="manifest" href="manifest.json">
 
     <style>
-        /* إعدادات المتغيرات المستوحاة من الكود اللي بعته */
         :root {
-            --primary: #10b981; /* زمردي */
-            --primary-dark: #059669;
-            --secondary: #f59e0b; /* ذهبي */
-            --bg-color: #f0fdf4; /* خلفية فاتحة جداً */
-            --card-bg: #ffffff;
+            --primary: #10b981; 
+            --bg-color: #f0fdf4;
             --text-main: #1f2937;
         }
 
@@ -39,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* حركات ناعمة للعناصر */
         .fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
             opacity: 0;
@@ -47,13 +42,9 @@
         }
 
         @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* خلفية زخرفية خفيفة */
         .islamic-pattern {
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
@@ -79,12 +70,18 @@
                 </div>
 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 space-x-reverse items-center">
+                <div class="hidden md:flex space-x-6 space-x-reverse items-center">
                     <a href="#features" class="text-gray-600 hover:text-emerald-600 font-medium transition">المميزات</a>
-                    <a href="#about" class="text-gray-600 hover:text-emerald-600 font-medium transition">عن الموقع</a>
-                    <a href="login.html" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 flex items-center gap-2">
-                        <span>دخول</span>
-                        <i class="fas fa-arrow-left text-sm"></i>
+                    
+                    <!-- زرار تسجيل الدخول (للناس اللي عندها حساب) -->
+                    <a href="login.html" class="text-emerald-700 font-bold hover:text-emerald-900 transition px-4">
+                        دخول
+                    </a>
+
+                    <!-- زرار الحساب الجديد (المميز) -->
+                    <a href="register.html" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 flex items-center gap-2">
+                        <span>حساب جديد</span>
+                        <i class="fas fa-user-plus text-sm"></i>
                     </a>
                 </div>
 
@@ -114,13 +111,14 @@
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center gap-4 fade-in-up" style="animation-delay: 0.4s;">
-                <a href="login.html" class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-lg px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-play-circle"></i>
+                <!-- الزرار الرئيسي بيودي على التسجيل دلوقتي -->
+                <a href="register.html" class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-lg px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-rocket"></i>
                     ابدأ رحلتك الآن
                 </a>
-                <a href="#features" class="bg-white text-emerald-600 border-2 border-emerald-100 text-lg px-8 py-4 rounded-2xl font-bold hover:border-emerald-500 hover:bg-emerald-50 transition duration-300 flex items-center justify-center gap-2">
-                    <i class="fas fa-info-circle"></i>
-                    كيف يعمل؟
+                <a href="login.html" class="bg-white text-emerald-600 border-2 border-emerald-100 text-lg px-8 py-4 rounded-2xl font-bold hover:border-emerald-500 hover:bg-emerald-50 transition duration-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i>
+                    دخول
                 </a>
             </div>
 
@@ -206,50 +204,21 @@
                 <p class="text-emerald-100 text-lg mb-8 max-w-2xl mx-auto">
                     سجل حسابك مجاناً وابدأ في بناء عادات ترافقك للجنة.
                 </p>
-                <a href="login.html" class="inline-block bg-white text-emerald-700 text-lg font-bold px-10 py-4 rounded-full shadow-lg hover:bg-emerald-50 hover:scale-105 transition duration-300">
+                <a href="register.html" class="inline-block bg-white text-emerald-700 text-lg font-bold px-10 py-4 rounded-full shadow-lg hover:bg-emerald-50 hover:scale-105 transition duration-300">
                     أنشئ حساب مجاني
                 </a>
             </div>
-            
-            <!-- Pattern Overlay -->
-            <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,...');"></div>
-            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8 mb-12">
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fas fa-leaf text-emerald-500 text-2xl"></i>
-                        <span class="text-2xl font-bold text-gray-800">تَزْكِيَة</span>
-                    </div>
-                    <p class="text-gray-500 max-w-sm">
-                        منصة غير ربحية تهدف لمساعدة المسلم على تنظيم عباداته وبناء عادات صالحة بأسلوب عصري ومحفز.
-                    </p>
+            <div class="text-center">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <i class="fas fa-leaf text-emerald-500 text-2xl"></i>
+                    <span class="text-2xl font-bold text-gray-800">تَزْكِيَة</span>
                 </div>
-                
-                <div>
-                    <h4 class="font-bold text-gray-800 mb-4">روابط سريعة</h4>
-                    <ul class="space-y-2 text-gray-500">
-                        <li><a href="#" class="hover:text-emerald-600 transition">الرئيسية</a></li>
-                        <li><a href="#" class="hover:text-emerald-600 transition">عن المنصة</a></li>
-                        <li><a href="#" class="hover:text-emerald-600 transition">اتصل بنا</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-gray-800 mb-4">تواصل معنا</h4>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-emerald-500 hover:text-white transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-emerald-500 hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-100 pt-8 text-center">
                 <p class="text-gray-400 text-sm">
                     © 2025 تزكية. تم التطوير بحب بواسطة <span class="text-emerald-600 font-bold">Kamshka Studio</span> 🚀
                 </p>
@@ -257,6 +226,6 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
