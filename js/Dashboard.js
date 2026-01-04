@@ -1,152 +1,109 @@
-/*
-  =========================================================
-  اسم الملف: js/dashboard.js
-  الوصف: المشغل الرئيسي (العدادات + تطبيق الإعدادات)
-  =========================================================
-*/
-
+/* js/dashboard.js - مشغل الداشبورد الموحد */
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getPrayerTimes, getNextPrayer, getHijriDateString } from './prayers.js';
 import { toggleHabit } from './habits.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log("🚀 الداشبورد بدأ...");
-    
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. تفعيل القائمة والخروج
     setupMobileMenu();
     setupLogout();
 
+    // 2. مراقبة المستخدم
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            console.log("✅ المستخدم:", user.displayName);
+            console.log("✅ المستخدم نشط:", user.displayName);
             await loadUserData(user);
-            await applyUserPreferences(user); // تطبيق الإعدادات (إخفاء/إظهار)
-            
-            setupHabitCheckboxes(user.uid); // تفعيل العدادات
-            updateStatsUI(); // تحديث الأرقام
+            await applyUserPreferences(user);
+            setupHabits(user.uid);
+            updateStats();
         } else {
             window.location.href = 'login.html';
         }
     });
 
-    initPrayerSection();
+    // 3. المواقيت
+    initPrayers();
 });
 
-// --- 1. دوال العدادات (Counters) ---
-function setupHabitCheckboxes(uid) {
+function setupHabits(uid) {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    
     checkboxes.forEach(box => {
         const label = box.closest('label');
-        if (!label) return;
-        const habitName = label.querySelector('span').textContent.trim();
+        if(!label) return;
+        const name = label.querySelector('span').textContent.trim();
         const today = new Date().toISOString().split('T')[0];
-
-        const savedState = localStorage.getItem(`habits_${today}`);
-        if (savedState) {
-            const data = JSON.parse(savedState);
-            if (data[habitName]) box.checked = true;
+        
+        // استرجاع
+        const saved = localStorage.getItem(`habits_${today}`);
+        if(saved) {
+            const data = JSON.parse(saved);
+            if(data[name]) box.checked = true;
         }
 
+        // تفاعل
         box.addEventListener('change', async (e) => {
-            await toggleHabit(habitName, e.target.checked);
-            updateStatsUI(); // تحديث فوري للأرقام
+            await toggleHabit(name, e.target.checked);
+            updateStats();
         });
     });
 }
 
-function updateStatsUI() {
+function updateStats() {
     // حساب الصلوات
-    const prayerChecks = document.querySelectorAll('input[data-type="prayer"]');
-    const prayersDone = Array.from(prayerChecks).filter(c => c.checked).length;
-    const prayersTotal = prayerChecks.length || 5; 
+    const pChecks = document.querySelectorAll('input[data-type="prayer"]');
+    const pDone = Array.from(pChecks).filter(c => c.checked).length;
+    const pTotal = pChecks.length || 5;
     
-    const prayerDisplay = document.getElementById('prayers-count-display');
-    const prayerBar = document.getElementById('prayers-progress-bar');
-    
-    if (prayerDisplay) prayerDisplay.textContent = `${prayersDone}/${prayersTotal}`;
-    if (prayerBar) prayerBar.style.width = `${(prayersDone / prayersTotal) * 100}%`;
+    document.getElementById('prayers-count-display').textContent = `${pDone}/${pTotal}`;
+    document.getElementById('prayers-progress-bar').style.width = `${(pDone/pTotal)*100}%`;
 
     // حساب السنن
-    const sunanChecks = document.querySelectorAll('input[data-type="sunnah"]');
-    const sunanDone = Array.from(sunanChecks).filter(c => c.checked).length;
-    const sunanTotal = sunanChecks.length || 12;
-
-    const sunanDisplay = document.getElementById('sunan-count-display');
-    const sunanBar = document.getElementById('sunan-progress-bar');
+    const sChecks = document.querySelectorAll('input[data-type="sunnah"]');
+    const sDone = Array.from(sChecks).filter(c => c.checked).length;
+    const sTotal = sChecks.length || 12;
     
-    if (sunanDisplay) sunanDisplay.textContent = `${sunanDone}/${sunanTotal}`;
-    if (sunanBar) sunanBar.style.width = `${(sunanDone / sunanTotal) * 100}%`;
+    document.getElementById('sunan-count-display').textContent = `${sDone}/${sTotal}`;
+    document.getElementById('sunan-progress-bar').style.width = `${(sDone/sTotal)*100}%`;
 }
 
-// --- 2. دوال الإعدادات (Preferences) ---
+async function loadUserData(user) {
+    document.querySelectorAll('.user-name-display').forEach(el => el.textContent = user.displayName || 'يا بطل');
+    document.getElementById('current-hijri-date').textContent = getHijriDateString();
+}
+
 async function applyUserPreferences(user) {
     try {
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        
-        if (snap.exists()) {
-            const prefs = snap.data().preferences;
-            if (prefs) {
-                // تطبيق إخفاء السنن
-                const sunanCard = document.getElementById('card-sunan');
-                const sunanItems = document.querySelectorAll('.sunnah-item');
-                
-                if (prefs.showSunan === false) {
-                    if (sunanCard) sunanCard.style.display = 'none';
-                    sunanItems.forEach(item => item.style.display = 'none');
-                } else {
-                    if (sunanCard) sunanCard.style.display = 'block';
-                    sunanItems.forEach(item => item.style.display = 'flex');
-                }
-            }
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if(snap.exists() && snap.data().preferences?.showSunan === false) {
+            document.getElementById('card-sunan').style.display = 'none';
+            document.querySelectorAll('.sunnah-item').forEach(el => el.style.display = 'none');
         }
-    } catch (e) {
-        console.error("فشل تحميل الإعدادات:", e);
+    } catch(e) { console.log(e); }
+}
+
+async function initPrayers() {
+    const timings = await getPrayerTimes();
+    if(timings) {
+        const next = getNextPrayer(timings);
+        document.getElementById('next-prayer-text').innerHTML = `القادمة: <span class="text-emerald-600 font-bold">${next.name_ar}</span> (${next.remainingMinutes}د)`;
     }
 }
 
-// --- دوال مساعدة ---
 function setupMobileMenu() {
-    const menuBtn = document.querySelector('.fa-bars');
+    const btn = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('aside');
-    if (menuBtn && sidebar) {
-        menuBtn.addEventListener('click', () => {
+    if(btn && sidebar) {
+        btn.addEventListener('click', () => {
             sidebar.classList.toggle('hidden');
-            sidebar.classList.toggle('fixed');
-            sidebar.classList.toggle('inset-0');
-            sidebar.classList.toggle('z-50');
-            sidebar.classList.toggle('w-full');
+            sidebar.classList.toggle('fixed'); sidebar.classList.toggle('inset-0'); sidebar.classList.toggle('z-50'); sidebar.classList.toggle('w-full');
         });
     }
 }
 
 function setupLogout() {
-    document.querySelectorAll('.logout-btn').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            await signOut(auth);
-            window.location.href = 'login.html';
-        });
+    document.querySelectorAll('.logout-btn').forEach(b => {
+        b.addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
     });
-}
-
-async function loadUserData(user) {
-    document.querySelectorAll('.user-name-display').forEach(el => 
-        el.textContent = user.displayName || 'يا بطل'
-    );
-    const hijriDate = document.getElementById('current-hijri-date');
-    if (hijriDate) hijriDate.textContent = getHijriDateString();
-}
-
-async function initPrayerSection() {
-    const timings = await getPrayerTimes();
-    if (timings) {
-        const nextPrayer = getNextPrayer(timings);
-        const prayerText = document.getElementById('next-prayer-text');
-        if (prayerText && nextPrayer) {
-            prayerText.innerHTML = `الصلاة القادمة: <span class="text-emerald-600 font-bold">${nextPrayer.name_ar}</span> (باقي ${nextPrayer.remainingMinutes} دقيقة)`;
-        }
-    }
 }
