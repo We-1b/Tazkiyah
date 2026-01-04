@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم | تزكية</title>
     
-    <!-- الخطوط والأيقونات -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +19,7 @@
 
     <div class="flex h-screen overflow-hidden">
         
-        <!-- Sidebar (القائمة الجانبية) -->
+        <!-- Sidebar -->
         <aside class="hidden md:flex flex-col w-64 bg-emerald-900 text-white shadow-xl transition-all duration-300">
             <div class="p-6 flex items-center justify-center border-b border-emerald-800">
                 <div class="flex items-center gap-2">
@@ -30,21 +29,17 @@
             </div>
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <a href="#" class="flex items-center p-3 bg-emerald-800 rounded-xl text-white shadow-lg transform scale-105 transition">
+                <a href="dashboard.html" class="flex items-center p-3 bg-emerald-800 rounded-xl text-white shadow-lg transform scale-105 transition">
                     <i class="fas fa-home w-8 text-center text-lg"></i>
                     <span class="font-bold">الرئيسية</span>
                 </a>
-                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition hover:translate-x-1">
-                    <i class="fas fa-praying-hands w-8 text-center text-lg"></i>
-                    <span>الصلوات والسنن</span>
-                </a>
-                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition hover:translate-x-1">
-                    <i class="fas fa-moon w-8 text-center text-lg"></i>
-                    <span>الصيام</span>
-                </a>
-                <a href="#" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition hover:translate-x-1">
+                <a href="reports.html" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition hover:translate-x-1">
                     <i class="fas fa-chart-pie w-8 text-center text-lg"></i>
                     <span>التقارير</span>
+                </a>
+                <a href="settings.html" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition hover:translate-x-1">
+                    <i class="fas fa-cog w-8 text-center text-lg"></i>
+                    <span>الإعدادات</span>
                 </a>
             </nav>
 
@@ -56,7 +51,7 @@
             </div>
         </aside>
 
-        <!-- Main Content Area -->
+        <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden relative">
             
             <!-- Topbar -->
@@ -67,41 +62,37 @@
                 
                 <div class="hidden sm:block text-gray-500 text-sm font-medium bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
                     <i class="far fa-calendar-alt text-emerald-500 ml-2"></i>
-                    <span id="current-hijri-date">14 جمادى الآخرة 1446هـ</span> | <span id="current-time" class="mr-2">...</span>
+                    <span id="current-hijri-date">...</span> | <span id="current-time" class="mr-2">...</span>
                 </div>
 
                 <div class="flex items-center gap-4">
                     <div class="text-right hidden sm:block">
                         <span class="block text-sm font-bold text-gray-800 user-name-display">جاري التحميل...</span>
-                        <span class="block text-xs text-emerald-600">مستوى مبتدئ</span>
                     </div>
                     <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold border-2 border-emerald-200 overflow-hidden shadow-sm">
-                        <i class="fas fa-user"></i> <!-- هنا الصورة هتنزل لو موجودة -->
+                        <i class="fas fa-user"></i>
                     </div>
                 </div>
             </header>
 
-            <!-- Content Scroll Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 md:p-8">
                 
-                <!-- Welcome Widget -->
+                <!-- Welcome -->
                 <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-3xl p-8 text-white shadow-xl mb-8 relative overflow-hidden group">
                     <div class="relative z-10">
                         <h2 class="text-3xl font-bold mb-3 user-name-display">السلام عليكم 👋</h2>
                         <p class="text-emerald-100 text-lg opacity-90 max-w-lg leading-relaxed">
-                            "أحب الأعمال إلى الله أدومها وإن قل". استمر في تقدمك، ونحن هنا لنعينك.
+                            "أحب الأعمال إلى الله أدومها وإن قل".
                         </p>
                     </div>
-                    <!-- Decorative Circles -->
                     <div class="welcome-widget-circle absolute -left-10 -bottom-20 w-64 h-64 bg-white opacity-10 rounded-full blur-2xl group-hover:scale-110 transition duration-700"></div>
-                    <div class="absolute right-10 top-10 w-20 h-20 bg-emerald-400 opacity-20 rounded-full blur-xl animate-pulse"></div>
                 </div>
 
-                <!-- Stats Grid -->
+                <!-- Stats Grid (الكروت بقت لينكات دلوقتي) -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     
-                    <!-- كارت الصلاة -->
-                    <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-t-4 border-emerald-500 hover:shadow-md transition">
+                    <!-- كارت الصلاة (بيوديك التقارير) -->
+                    <a href="reports.html" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-emerald-500 hover:shadow-md transition cursor-pointer">
                         <div class="flex justify-between items-center mb-6">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
@@ -109,44 +100,38 @@
                                 </div>
                                 <h3 class="font-bold text-gray-800">الصلوات</h3>
                             </div>
-                            <span class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full text-xs font-bold">اليوم</span>
-                        </div>
-                        
-                        <div class="mb-2 flex justify-between text-sm text-gray-500">
-                            <span>الإنجاز</span>
-                            <span>40%</span>
+                            <!-- هنا الرقم اللي هيتغير -->
+                            <span id="prayers-count-display" class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full text-xs font-bold">0/5</span>
                         </div>
                         <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-emerald-500 h-2.5 rounded-full transition-all duration-1000" style="width: 40%"></div>
+                            <div id="prayers-progress-bar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
                         </div>
                         <p class="text-xs text-gray-400 mt-4 flex items-center gap-1">
                             <i class="far fa-clock"></i>
-                            <span id="next-prayer-text">جاري حساب الوقت...</span>
+                            <span id="next-prayer-text">جاري الحساب...</span>
                         </p>
-                    </div>
+                    </a>
 
                     <!-- كارت السنن -->
-                    <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-t-4 border-amber-500 hover:shadow-md transition">
+                    <a href="reports.html" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-amber-500 hover:shadow-md transition cursor-pointer">
                         <div class="flex justify-between items-center mb-6">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
                                     <i class="fas fa-star"></i>
                                 </div>
-                                <h3 class="font-bold text-gray-800">السنن والرواتب</h3>
+                                <h3 class="font-bold text-gray-800">السنن</h3>
                             </div>
-                            <span class="text-amber-700 bg-amber-100 px-3 py-1 rounded-full text-xs font-bold">12 ركعة</span>
+                            <!-- رقم السنن -->
+                            <span id="sunan-count-display" class="text-amber-700 bg-amber-100 px-3 py-1 rounded-full text-xs font-bold">0/12</span>
                         </div>
-                        
-                        <div class="flex gap-2 mt-2">
-                            <span class="w-full bg-amber-100 h-2 rounded-full"></span>
-                            <span class="w-full bg-amber-500 h-2 rounded-full"></span> <!-- مثال للمكتمل -->
-                            <span class="w-full bg-amber-100 h-2 rounded-full"></span>
+                        <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                            <div id="sunan-progress-bar" class="bg-amber-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
                         </div>
-                        <p class="text-xs text-gray-400 mt-4">لا تنسَ ركعتي الضحى، فهي صلاة الأوابين.</p>
-                    </div>
+                        <p class="text-xs text-gray-400 mt-4">ركعتا الضحى صلاة الأوابين.</p>
+                    </a>
 
                     <!-- كارت الذكر -->
-                    <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
+                    <a href="reports.html" class="stat-card block bg-white p-6 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition cursor-pointer">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="font-bold text-gray-800">ورد الاستغفار</h3>
                             <i class="fas fa-fingerprint text-blue-400 text-xl"></i>
@@ -155,48 +140,49 @@
                             <span class="text-4xl font-extrabold text-gray-800 counter-value">100</span>
                             <span class="text-sm text-gray-400 mt-1">من أصل 1000</span>
                         </div>
-                        <button class="w-full mt-2 bg-blue-50 text-blue-600 py-2 rounded-lg text-sm font-bold hover:bg-blue-100 transition">
-                            سجل المزيد +
-                        </button>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Habits Checklist -->
                 <div class="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
-                        <h3 class="font-bold text-xl text-gray-800 flex items-center gap-2">
-                            <i class="fas fa-check-circle text-emerald-500"></i>
-                            متابعة اليوم
-                        </h3>
-                        <span class="text-sm text-gray-400 bg-gray-50 px-3 py-1 rounded-lg">3 مهام متبقية</span>
-                    </div>
+                    <h3 class="font-bold text-xl text-gray-800 flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
+                        <i class="fas fa-check-circle text-emerald-500"></i>
+                        متابعة اليوم
+                    </h3>
 
                     <div class="space-y-4">
-                        <!-- Task Item -->
+                        <!-- الصلوات (لاحظ الـ data-type) -->
                         <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
                             <div class="relative flex items-center">
-                                <input type="checkbox" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
+                                <input type="checkbox" data-type="prayer" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
                             </div>
-                            <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">صلاة الفجر في جماعة</span>
+                            <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">صلاة الفجر</span>
                             <span class="mr-auto text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">فرض</span>
                         </label>
 
-                        <!-- Task Item -->
                         <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
                             <div class="relative flex items-center">
-                                <input type="checkbox" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
+                                <input type="checkbox" data-type="prayer" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
+                            </div>
+                            <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">صلاة الظهر</span>
+                            <span class="mr-auto text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">فرض</span>
+                        </label>
+
+                        <!-- السنن (لاحظ الـ data-type) -->
+                        <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
+                            <div class="relative flex items-center">
+                                <input type="checkbox" data-type="sunnah" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
                             </div>
                             <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">أذكار الصباح</span>
                             <span class="mr-auto text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">سنة</span>
                         </label>
-
-                        <!-- Task Item -->
+                        
                         <label class="flex items-center p-3 rounded-xl hover:bg-gray-50 transition cursor-pointer group border border-transparent hover:border-gray-100">
                             <div class="relative flex items-center">
-                                <input type="checkbox" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
+                                <input type="checkbox" data-type="sunnah" class="form-checkbox h-6 w-6 text-emerald-600 rounded-md border-gray-300 focus:ring-emerald-500 transition duration-200">
                             </div>
-                            <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">قراءة ورد القرآن</span>
-                            <span class="mr-auto text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">يومي</span>
+                            <span class="mr-4 text-gray-700 font-medium group-hover:text-emerald-700 transition select-none">سنن الرواتب</span>
+                            <span class="mr-auto text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">سنة</span>
                         </label>
                     </div>
                 </div>
@@ -205,8 +191,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <!-- هنا ربطنا الملفات المهمة عشان كله يشتغل -->
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/dashboard.js"></script>
     <script type="module" src="js/chat-widget.js"></script>

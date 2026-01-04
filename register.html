@@ -3,66 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء حساب جديد | تزكية</title>
+    <title>التقارير | تزكية</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة لرسم المبيانات (Charts) خفيفة جداً -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>body { font-family: 'Baloo Bhaijaan 2', sans-serif; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100">
-        <div class="text-center mb-6">
-            <h2 class="text-3xl font-bold text-gray-800">حساب جديد 🚀</h2>
-            <p class="text-gray-500 mt-2">ابدأ رحلتك في تزكية النفس</p>
-        </div>
-
-        <!-- زرار جوجل للتسجيل -->
-        <button id="googleRegisterBtn" class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-3 mb-6 shadow-sm group">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6 group-hover:scale-110 transition" alt="Google">
-            <span>تسجيل حساب باستخدام جوجل</span>
-        </button>
-
-        <div class="relative mb-6">
-            <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-200"></div>
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="hidden md:flex flex-col w-64 bg-emerald-900 text-white shadow-xl">
+            <div class="p-6 flex items-center justify-center border-b border-emerald-800">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-leaf text-emerald-400 text-2xl"></i>
+                    <h1 class="text-2xl font-bold">تزكية</h1>
+                </div>
             </div>
-            <div class="relative flex justify-center text-sm">
-                <span class="px-2 bg-white text-gray-500">أو بالبريد الإلكتروني</span>
-            </div>
-        </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="dashboard.html" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition">
+                    <i class="fas fa-home w-8 text-center"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="#" class="flex items-center p-3 bg-emerald-800 rounded-xl text-white shadow-lg">
+                    <i class="fas fa-chart-pie w-8 text-center"></i>
+                    <span>التقارير</span>
+                </a>
+                <a href="settings.html" class="flex items-center p-3 hover:bg-emerald-800 rounded-xl text-emerald-100 transition">
+                    <i class="fas fa-cog w-8 text-center"></i>
+                    <span>الإعدادات</span>
+                </a>
+            </nav>
+        </aside>
 
-        <form id="registerForm" class="space-y-4">
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">الاسم</label>
-                <input type="text" id="name" class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-gray-50" placeholder="اسمك الثنائي" required>
-            </div>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow-sm h-20 flex items-center px-6 justify-between">
+                <h2 class="text-xl font-bold text-gray-800">تحليل الأداء</h2>
+                <div class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-lg">
+                    البيانات تتحدث تلقائياً 🔄
+                </div>
+            </header>
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
-                <input type="email" id="email" class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-gray-50" placeholder="name@example.com" required>
-            </div>
+            <main class="flex-1 overflow-y-auto p-6 md:p-8">
+                
+                <!-- ملخص سريع -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-emerald-500">
+                        <p class="text-gray-500 text-sm">التزامك هذا الأسبوع</p>
+                        <h3 class="text-3xl font-bold text-emerald-600 mt-1" id="weekly-score">--%</h3>
+                        <p class="text-xs text-gray-400 mt-2">مقارنة بالأسبوع الماضي</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-500">
+                        <p class="text-gray-500 text-sm">أيام الصيام (الشهر)</p>
+                        <h3 class="text-3xl font-bold text-blue-600 mt-1" id="monthly-fasting">0</h3>
+                        <p class="text-xs text-gray-400 mt-2">يوم</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-amber-500">
+                        <p class="text-gray-500 text-sm">أطول سلسلة استمرار</p>
+                        <h3 class="text-3xl font-bold text-amber-600 mt-1" id="streak-count">0</h3>
+                        <p class="text-xs text-gray-400 mt-2">يوم متواصل</p>
+                    </div>
+                </div>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
-                <input type="password" id="password" class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-gray-50" placeholder="********" required>
-            </div>
+                <!-- الرسم البياني للأسبوع -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm mb-8">
+                    <h3 class="font-bold text-lg mb-6 text-gray-700">أداء الصلوات آخر 7 أيام</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
 
-            <button type="submit" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold hover:bg-emerald-700 transition shadow-lg mt-2">
-                إنشاء الحساب
-            </button>
-        </form>
+                <!-- نصيحة بناءً على الأداء -->
+                <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 flex gap-4 items-start">
+                    <div class="bg-white p-3 rounded-full text-emerald-600 shadow-sm">
+                        <i class="fas fa-lightbulb text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-emerald-800 mb-1">تحليل رفيق الذكي 🤖</h4>
+                        <p class="text-emerald-700 text-sm" id="ai-insight">
+                            جاري تحليل بياناتك لاستخراج نصيحة مخصصة...
+                        </p>
+                    </div>
+                </div>
 
-        <p id="regError" class="text-red-500 text-sm text-center mt-4 hidden"></p>
-
-        <div class="mt-6 text-center text-sm text-gray-500">
-            لديك حساب بالفعل؟ <a href="login.html" class="text-emerald-600 font-bold hover:underline">سجل دخول</a>
+            </main>
         </div>
     </div>
 
-    <!-- كود الجافا سكريبت الخاص بالتسجيل -->
-    <script type="module" src="js/register.js"></script>
-
+    <script type="module" src="js/reports.js"></script>
 </body>
 </html>
