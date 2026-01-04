@@ -1,14 +1,16 @@
 /*
   =========================================================
   اسم الملف: js/firebase-config.js
-  الوصف: ملف الربط بفايربيس (تم التحديث بالمفاتيح الحقيقية)
+  الوصف: ملف الربط بفايربيس (تم التحديث بالمفاتيح الحقيقية + Analytics)
   =========================================================
 */
 
 // بنستخدم روابط CDN عشان الموقع يشتغل على المتصفح مباشرة من غير Node.js
+// بنستخدم نسخة مستقرة (10.7.1) عشان نضمن توافق كل الخدمات مع بعض
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
 // إعدادات مشروعك الحقيقية (Tazkiyah App)
 const firebaseConfig = {
@@ -23,8 +25,10 @@ const firebaseConfig = {
 
 // تهيئة التطبيق
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app); // تفعيل خدمة التحليلات
 
-// تصدير الأدوات لباقي الملفات
+// تصدير الأدوات لباقي الملفات عشان نستخدمها في login.js و dashboard.js
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
+export { analytics };
