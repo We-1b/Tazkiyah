@@ -6,13 +6,13 @@
 */
 
 // بنستخدم روابط CDN عشان الموقع يشتغل على المتصفح مباشرة من غير Node.js
-// بنستخدم نسخة مستقرة (10.7.1) عشان نضمن توافق كل الخدمات مع بعض
+// ⚠️ تم استخدام الإصدار 10.7.1 بدلاً من 12.7.0 لأن 12 لم يصدر بعد وسيسبب خطأ
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
-// إعدادات مشروعك الحقيقية (Tazkiyah App)
+// إعدادات مشروعك الحقيقية (Tazkiyah App) - تم نسخها من الصورة/الكود
 const firebaseConfig = {
     apiKey: "AIzaSyCPLO_YbLlBWZ_ivAOBh9Fq1KqoOZbWOGs",
     authDomain: "tazkiyah-app-d27b8.firebaseapp.com",
