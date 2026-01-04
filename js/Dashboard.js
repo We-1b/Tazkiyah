@@ -1,109 +1,95 @@
-/* js/dashboard.js - مشغل الداشبورد الموحد */
+/*
+  =========================================================
+  اسم الملف: js/register.js
+  الوصف: التحكم في إنشاء الحساب (تركيز على الإيميل فقط)
+  =========================================================
+*/
+
+import { registerUser } from './auth.js'; 
+import { updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { auth, db } from './firebase-config.js';
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getPrayerTimes, getNextPrayer, getHijriDateString } from './prayers.js';
-import { toggleHabit } from './habits.js';
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. تفعيل القائمة والخروج
-    setupMobileMenu();
-    setupLogout();
+const regForm = document.getElementById('registerForm');
+const errorMsg = document.getElementById('regError');
+const googleBtn = document.getElementById('googleRegisterBtn');
 
-    // 2. مراقبة المستخدم
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            console.log("✅ المستخدم نشط:", user.displayName);
-            await loadUserData(user);
-            await applyUserPreferences(user);
-            setupHabits(user.uid);
-            updateStats();
-        } else {
-            window.location.href = 'login.html';
-        }
+// 1. (تم إيقاف جوجل مؤقتاً بناءً على طلبك) 🚫
+if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+        alert("خلينا شغالين بالإيميل دلوقتي أضمن 😉");
     });
+    // لو عايز تخفيه خالص ممكن تزود السطر ده:
+    // googleBtn.style.display = 'none';
+}
 
-    // 3. المواقيت
-    initPrayers();
-});
-
-function setupHabits(uid) {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(box => {
-        const label = box.closest('label');
-        if(!label) return;
-        const name = label.querySelector('span').textContent.trim();
-        const today = new Date().toISOString().split('T')[0];
+// 2. تشغيل تسجيل الإيميل والباسورد (المهم) ✅
+if (regForm) {
+    regForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        // استرجاع
-        const saved = localStorage.getItem(`habits_${today}`);
-        if(saved) {
-            const data = JSON.parse(saved);
-            if(data[name]) box.checked = true;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = regForm.querySelector('button[type="submit"]');
+
+        // تغيير حالة الزرار عشان تعرف إنه شغال
+        const originalText = btn.textContent;
+        btn.textContent = 'جاري تسجيلك... ⏳';
+        btn.disabled = true;
+        errorMsg.classList.add('hidden');
+
+        try {
+            // أ. إنشاء الحساب في Authentication
+            const result = await registerUser(email, password);
+
+            if (result.success) {
+                console.log("✅ تم إنشاء الحساب بنجاح:", result.user.email);
+
+                // ب. تحديث اسم المستخدم (Profile)
+                try {
+                    await updateProfile(result.user, { displayName: name });
+                } catch (profileErr) {
+                    console.warn("⚠️ تحذير: فشل تحديث الاسم في البروفايل (مش مشكلة)", profileErr);
+                }
+                
+                // ج. محاولة حفظ البيانات في الداتابيز (Firestore)
+                // ⚠️ حتى لو دي فشلت، هندخلك الداشبورد برضه
+                try {
+                    const userRef = doc(db, "users", result.user.uid);
+                    await setDoc(userRef, { 
+                        name: name,
+                        email: email,
+                        createdAt: new Date(),
+                        preferences: { showSunan: true, enableFasting: true }
+                    }, { merge: true });
+                    console.log("✅ تم حفظ البيانات في الداتابيز");
+                } catch (dbError) {
+                    console.error("⚠️ فشل الكتابة في الداتابيز (ممكن بسبب الـ Rules):", dbError);
+                }
+
+                // د. التحويل النهائي (أهم خطوة)
+                console.log("🚀 جاري التحويل للداشبورد...");
+                window.location.href = 'dashboard.html';
+
+            } else {
+                throw new Error(result.error);
+            }
+
+        } catch (error) {
+            // التعامل مع الأخطاء
+            btn.textContent = originalText;
+            btn.disabled = false;
+            
+            console.error("❌ خطأ في التسجيل:", error);
+            
+            let message = "حدث خطأ غير متوقع.";
+            if (error.message.includes("email-already-in-use")) message = "البريد ده مستخدم قبل كده، جرب تسجل دخول.";
+            if (error.message.includes("weak-password")) message = "الباسورد ضعيف، خليه 6 أرقام أو حروف على الأقل.";
+            if (error.message.includes("invalid-email")) message = "شكل الإيميل مش مظبوط.";
+            
+            errorMsg.textContent = message;
+            errorMsg.classList.remove('hidden');
         }
-
-        // تفاعل
-        box.addEventListener('change', async (e) => {
-            await toggleHabit(name, e.target.checked);
-            updateStats();
-        });
-    });
-}
-
-function updateStats() {
-    // حساب الصلوات
-    const pChecks = document.querySelectorAll('input[data-type="prayer"]');
-    const pDone = Array.from(pChecks).filter(c => c.checked).length;
-    const pTotal = pChecks.length || 5;
-    
-    document.getElementById('prayers-count-display').textContent = `${pDone}/${pTotal}`;
-    document.getElementById('prayers-progress-bar').style.width = `${(pDone/pTotal)*100}%`;
-
-    // حساب السنن
-    const sChecks = document.querySelectorAll('input[data-type="sunnah"]');
-    const sDone = Array.from(sChecks).filter(c => c.checked).length;
-    const sTotal = sChecks.length || 12;
-    
-    document.getElementById('sunan-count-display').textContent = `${sDone}/${sTotal}`;
-    document.getElementById('sunan-progress-bar').style.width = `${(sDone/sTotal)*100}%`;
-}
-
-async function loadUserData(user) {
-    document.querySelectorAll('.user-name-display').forEach(el => el.textContent = user.displayName || 'يا بطل');
-    document.getElementById('current-hijri-date').textContent = getHijriDateString();
-}
-
-async function applyUserPreferences(user) {
-    try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if(snap.exists() && snap.data().preferences?.showSunan === false) {
-            document.getElementById('card-sunan').style.display = 'none';
-            document.querySelectorAll('.sunnah-item').forEach(el => el.style.display = 'none');
-        }
-    } catch(e) { console.log(e); }
-}
-
-async function initPrayers() {
-    const timings = await getPrayerTimes();
-    if(timings) {
-        const next = getNextPrayer(timings);
-        document.getElementById('next-prayer-text').innerHTML = `القادمة: <span class="text-emerald-600 font-bold">${next.name_ar}</span> (${next.remainingMinutes}د)`;
-    }
-}
-
-function setupMobileMenu() {
-    const btn = document.querySelector('.menu-toggle');
-    const sidebar = document.querySelector('aside');
-    if(btn && sidebar) {
-        btn.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-            sidebar.classList.toggle('fixed'); sidebar.classList.toggle('inset-0'); sidebar.classList.toggle('z-50'); sidebar.classList.toggle('w-full');
-        });
-    }
-}
-
-function setupLogout() {
-    document.querySelectorAll('.logout-btn').forEach(b => {
-        b.addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
     });
 }
