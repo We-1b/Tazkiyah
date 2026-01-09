@@ -1,23 +1,28 @@
-/* js/habits.js */
+/* js/habits.js - حفظ العادات في الداتابيز */
 import { auth, db } from './firebase-config.js';
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export async function toggleHabit(name, checked) {
+// الدالة دي بتستدعى لما اليوزر يعلم صح أو غلط
+export async function toggleHabit(habitName, isCompleted) {
     const user = auth.currentUser;
-    const today = new Date().toISOString().split('T')[0];
-    
-    // 1. تحديث محلي
-    const key = `habits_${today}`;
-    let data = JSON.parse(localStorage.getItem(key)) || {};
-    data[name] = checked;
-    localStorage.setItem(key, JSON.stringify(data));
+    if (!user) {
+        console.warn("⚠️ المستخدم غير مسجل، لن يتم الحفظ في السحابة.");
+        return; 
+    }
 
-    // 2. تحديث سيرفر
-    if(user) {
-        try {
-            await setDoc(doc(db, "users", user.uid, "dailyLogs", today), {
-                [name]: checked, lastUpdated: new Date()
-            }, { merge: true });
-        } catch(e) { console.error("Sync error:", e); }
+    const today = new Date().toISOString().split('T')[0];
+    const logRef = doc(db, "users", user.uid, "dailyLogs", today);
+
+    try {
+        // حفظ في الداتابيز (Firestore)
+        // بنستخدم merge: true عشان منمسحش باقي العادات اللي اتسجلت النهاردة
+        await setDoc(logRef, {
+            [habitName]: isCompleted, // اسم العادة وقيمتها (مثال: "صلاة الفجر": true)
+            last_updated: new Date()
+        }, { merge: true });
+
+        console.log(`✅ تم حفظ "${habitName}" في السحابة.`);
+    } catch (error) {
+        console.error("❌ فشل الحفظ في السحابة:", error);
     }
 }

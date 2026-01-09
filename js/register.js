@@ -1,7 +1,7 @@
 /*
   =========================================================
   اسم الملف: js/register.js
-  الوصف: التحكم في إنشاء الحساب (تركيز على الإيميل فقط)
+  الوصف: التحكم في إنشاء الحساب (إيميل فقط)
   =========================================================
 */
 
@@ -12,16 +12,8 @@ import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-
 
 const regForm = document.getElementById('registerForm');
 const errorMsg = document.getElementById('regError');
-const googleBtn = document.getElementById('googleRegisterBtn');
 
-// 1. (تم إيقاف جوجل مؤقتاً بناءً على طلبك) 🚫
-if (googleBtn) {
-    googleBtn.addEventListener('click', () => {
-        alert("خلينا شغالين بالإيميل دلوقتي أضمن 😉");
-    });
-}
-
-// 2. تشغيل تسجيل الإيميل والباسورد (المهم) ✅
+// تشغيل تسجيل الإيميل والباسورد
 if (regForm) {
     regForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -32,39 +24,39 @@ if (regForm) {
         const password = document.getElementById('password').value;
         const btn = regForm.querySelector('button[type="submit"]');
 
-        // --- خطوة الأمان الجديدة: التأكد من البيانات قبل الإرسال ---
+        // --- خطوة الأمان: التأكد من البيانات ---
         if (!name || !email || !password) {
             showError("يا بطل، لازم تملأ كل البيانات (الاسم، الإيميل، والباسورد) 😉");
-            return; // وقف هنا متكملش
+            return;
         }
 
         if (password.length < 6) {
             showError("كلمة المرور ضعيفة، خليها 6 حروف أو أرقام على الأقل 🔐");
             return;
         }
-        // -------------------------------------------------------
 
-        // تغيير حالة الزرار عشان تعرف إنه شغال
+        // تغيير حالة الزرار
         const originalText = btn.textContent;
         btn.textContent = 'جاري تسجيلك... ⏳';
         btn.disabled = true;
         errorMsg.classList.add('hidden');
 
         try {
-            // أ. إنشاء الحساب في Authentication
+            // 1. إنشاء الحساب في Authentication
             const result = await registerUser(email, password);
 
             if (result.success) {
                 console.log("✅ تم إنشاء الحساب بنجاح:", result.user.email);
 
-                // ب. تحديث اسم المستخدم (Profile)
+                // 2. تحديث اسم المستخدم (Profile)
                 try {
                     await updateProfile(result.user, { displayName: name });
                 } catch (profileErr) {
-                    console.warn("⚠️ تحذير: فشل تحديث الاسم في البروفايل (مش مشكلة)", profileErr);
+                    console.warn("⚠️ تحذير: فشل تحديث الاسم في البروفايل", profileErr);
                 }
                 
-                // ج. محاولة حفظ البيانات في الداتابيز (Firestore)
+                // 3. حفظ البيانات في الداتابيز (Firestore)
+                // دي الخطوة اللي بتخلي الاسم يظهر عندك في الـ Console في users
                 try {
                     const userRef = doc(db, "users", result.user.uid);
                     await setDoc(userRef, { 
@@ -75,10 +67,10 @@ if (regForm) {
                     }, { merge: true });
                     console.log("✅ تم حفظ البيانات في الداتابيز");
                 } catch (dbError) {
-                    console.error("⚠️ فشل الكتابة في الداتابيز (ممكن بسبب الـ Rules):", dbError);
+                    console.error("⚠️ فشل الكتابة في الداتابيز:", dbError);
                 }
 
-                // د. التحويل النهائي (أهم خطوة)
+                // 4. التحويل للداشبورد
                 console.log("🚀 جاري التحويل للداشبورد...");
                 window.location.href = 'dashboard.html';
 
@@ -93,13 +85,11 @@ if (regForm) {
             
             console.error("❌ خطأ في التسجيل:", error);
             
-            // هنا بنعرض الخطأ الأصلي عشان نعرف السبب
             let message = "حدث خطأ: " + error.message;
 
             if (error.message.includes("email-already-in-use")) message = "البريد ده مستخدم قبل كده، جرب تسجل دخول.";
             if (error.message.includes("weak-password")) message = "الباسورد ضعيف، خليه 6 أرقام أو حروف على الأقل.";
             if (error.message.includes("invalid-email")) message = "شكل الإيميل مش مظبوط.";
-            if (error.message.includes("missing-password")) message = "نسيت تكتب الباسورد يا هندسة!";
             if (error.message.includes("operation-not-allowed")) message = "تنبيه هام: لازم تفعل Email/Password من لوحة تحكم فايربيس!";
             
             showError(message);
